@@ -1,0 +1,192 @@
+@import '@picocss/pico/css/pico.orange.min.css';
+@import '@fontsource/atkinson-hyperlegible';
+
+:root {
+	--pico-font-family: 'Atkinson Hyperlegible', sans-serif;
+	--border-color: #2a3140;
+}
+
+html,
+body {
+	height: 100%;
+}
+
+body {
+	padding-inline: 1rem;
+
+	@media (width > 1400px) {
+		padding-inline: 0rem;
+	}
+}
+
+a {
+	text-decoration: none;
+}
+
+h1 {
+	text-transform: capitalize;
+}
+
+ul {
+	padding: 0;
+
+	li {
+		list-style-position: inside;
+		list-style-type: disc;
+	}
+}
+
+.layout {
+	min-height: 100%;
+	max-width: 1400px;
+	display: grid;
+	grid-template-rows: auto 1fr auto;
+	row-gap: 4rem;
+	padding-top: 2rem;
+	margin-inline: auto;
+
+	header {
+		display: flex;
+		justify-content: space-between;
+		gap: 2rem;
+		padding-bottom: 1rem;
+		border-bottom: 1px solid var(--border-color);
+	}
+
+	footer {
+		padding: 1rem 0 2rem 0;
+		border-top: 1px solid var(--border-color);
+	}
+}
+
+.posts {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 1rem;
+	margin-top: 2rem;
+
+	article {
+		aspect-ratio: 1;
+		font-size: 1.2rem;
+	}
+}
+
+.content {
+	display: grid;
+
+	@media (width > 1000px) {
+		grid-template-columns: 1fr auto;
+	}
+
+	article {
+		max-width: 60ch;
+		padding: 0;
+		background: transparent;
+		box-shadow: none;
+
+		button {
+			margin-top: 1rem;
+		}
+	}
+
+	.comments {
+		max-width: 600px;
+		margin-top: 2rem;
+
+		.comment {
+			padding-block: 0.5rem;
+			border-bottom: 1px solid var(--border-color);
+
+			&:last-of-type {
+				margin-bottom: 1rem;
+			}
+
+			h6 {
+				margin: 0;
+				text-transform: lowercase;
+			}
+
+			p {
+				margin: 0;
+			}
+		}
+	}
+}
+
+form {
+	textarea {
+		height: 10lh;
+	}
+
+	button[type='submit'] {
+		width: auto;
+	}
+
+	.issue {
+		color: red;
+	}
+}
+
+.dashboard {
+	height: 100%;
+
+	@media (width > 1000px) {
+		display: grid;
+		grid-template-columns: 400px 1fr;
+		gap: 2rem;
+	}
+
+	aside {
+		@media (width > 1000px) {
+			padding-right: 1rem;
+			border-right: 1px solid var(--border-color);
+		}
+
+		.heading {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			gap: 1rem;
+			padding-bottom: 1rem;
+			border-bottom: 1px solid var(--border-color);
+
+			h2 {
+				margin: 0;
+			}
+
+			a {
+				padding: 0.4rem;
+			}
+		}
+
+		ul {
+			margin-top: 1rem;
+
+			li {
+				padding: 0;
+			}
+		}
+	}
+}
+
+.auth {
+	max-width: 400px;
+	margin-inline: auto;
+}
+
+.capitalize {
+	text-transform: capitalize;
+}
+
+.truncate-text {
+	max-width: 400px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.separator {
+	margin-top: 2rem;
+	padding-top: 2rem;
+	border-top: 1px solid var(--border-color);
+}
