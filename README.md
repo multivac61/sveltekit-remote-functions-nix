@@ -6,7 +6,8 @@ This is a SvelteKit CRUD app example using:
 - [Better Auth](https://www.better-auth.com/) for authentication
 - [Drizzle ORM](https://orm.drizzle.team/) for working with the SQLite database
 - [Pico CSS](https://picocss.com/) for styling
-- [Nix](https://nix.dev/) for build system, formatting and checks
+- [Prettier](https://prettier.io/) for code formatting
+- [Nix](https://nix.dev/) for dev shell, deterministic build system and checks
 
 ## Setup
 

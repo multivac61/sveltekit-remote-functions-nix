@@ -119,7 +119,7 @@
             src = ./.;
             pnpmDeps = pkgs.pnpm.fetchDeps {
               inherit (finalAttrs) pname version src;
-              hash = "sha256-HZzetGKIAxaDs0KbRVHAJD7kg6N0TFIYY5ZmgpGBbcg=";
+              hash = "sha256-Kn+5AkZ2yz4tpEtmX523pK2RvteizZYVpcArQuKhNhg=";
               fetcherVersion = 2;
             };
             # This needs to change before
@@ -129,6 +129,7 @@
             nativeBuildInputs = with pkgs; [
               nodejs
               pnpm.configHook
+              makeWrapper
             ];
 
             buildPhase = ''
@@ -140,8 +141,21 @@
             installPhase = ''
               runHook preInstall
 
-              mkdir -p $out
-              mv .svelte-kit/output/* $out/
+              mkdir -p $out/build
+
+              # Copy build output
+              cp -r build/* $out/build/
+
+              # Copy package files and install only production dependencies
+              cp package.json pnpm-lock.yaml $out/build/
+              cd $out/build
+              pnpm install --prod --frozen-lockfile
+
+              # Create wrapper to run the server
+              makeWrapper ${pkgs.nodejs}/bin/node $out/bin/server \
+                --chdir $out/build \
+                --set NODE_PATH "$out/build/node_modules" \
+                --add-flags "index.js"
 
               runHook postInstall
             '';
