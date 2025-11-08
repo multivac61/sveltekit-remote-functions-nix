@@ -1,5 +1,5 @@
 import { error, redirect } from "@sveltejs/kit";
-import { command, form, getRequestEvent, query } from "$app/server";
+import { command, form, query } from "$app/server";
 import { eq, sql, and } from "drizzle-orm";
 import { z } from "zod/mini";
 import { db } from "$lib/server/database";
@@ -9,16 +9,7 @@ import {
   postCommentSchema,
   createPostSchema,
 } from "$lib/schema/posts";
-
-function requireAuth() {
-  const { locals } = getRequestEvent();
-
-  if (!locals.user) {
-    redirect(307, "/auth/login");
-  }
-
-  return locals.user;
-}
+import { requireAuth } from "$lib/server/auth";
 
 export const getPosts = query(async () => {
   const posts = await db.select().from(table.posts);
@@ -26,7 +17,7 @@ export const getPosts = query(async () => {
 });
 
 export const getAuthorPosts = query(async () => {
-  const user = requireAuth();
+  const user = await requireAuth();
   const posts = await db
     .select()
     .from(table.posts)
@@ -44,7 +35,7 @@ export const getPost = query(z.string(), async (slug) => {
 });
 
 export const createPost = form(createPostSchema, async (post) => {
-  const user = requireAuth();
+  const user = await requireAuth();
   await db.insert(table.posts).values({ ...post, authorId: user.id });
   redirect(303, `/admin/edit/${post.slug}`);
 });
@@ -56,13 +47,13 @@ export const updatePost = form(
       .update(table.posts)
       .set({ title, slug, content })
       .where(
-        and(eq(table.posts.id, id), eq(table.posts.authorId, requireAuth().id)),
+        and(eq(table.posts.id, id), eq(table.posts.authorId, (await requireAuth()).id)),
       );
   },
 );
 
 export const removePost = form(updatePostSchema, async ({ id }) => {
-  const user = requireAuth();
+  const user = await requireAuth();
   await db
     .delete(table.posts)
     .where(and(eq(table.posts.id, id), eq(table.posts.authorId, user.id)));
@@ -94,6 +85,6 @@ export const getPostComments = query(z.number(), async (id) => {
 });
 
 export const postComment = form(postCommentSchema, async (comment) => {
-  const user = requireAuth();
+  const user = await requireAuth();
   await db.insert(table.comments).values({ ...comment, authorId: user.id });
 });

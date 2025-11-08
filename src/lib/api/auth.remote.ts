@@ -1,10 +1,11 @@
 import { redirect } from "@sveltejs/kit";
 import { form, getRequestEvent, query } from "$app/server";
-import { auth } from "$lib/server/auth";
+import { auth, requireAuth } from "$lib/server/auth";
 import { signupSchema, loginSchema } from "$lib/schema/auth";
 
 export const signup = form(signupSchema, async (user) => {
-  await auth.api.signUpEmail({ body: user });
+  const { request } = getRequestEvent();
+  await auth.api.signUpEmail({ body: user, headers: request.headers });
   redirect(307, `/admin`);
 });
 
@@ -21,9 +22,5 @@ export const signout = form(async () => {
 });
 
 export const getUser = query(async () => {
-  const { locals } = getRequestEvent();
-  if (!locals.user) {
-    redirect(307, "/auth/login");
-  }
-  return locals.user;
+  return requireAuth();
 });
