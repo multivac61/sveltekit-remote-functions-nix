@@ -125,6 +125,13 @@
               makeWrapper
             ];
 
+            doCheck = true;
+            checkPhase = ''
+              runHook preCheck
+              pnpm format:check
+              runHook postCheck
+            '';
+
             buildPhase = ''
               runHook preBuild
               pnpm build
