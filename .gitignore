@@ -233,3 +233,4 @@ static/*.webp
 static/*.json
 
 .direnv
+result
