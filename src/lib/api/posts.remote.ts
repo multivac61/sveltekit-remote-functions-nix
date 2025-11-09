@@ -86,5 +86,5 @@ export const getPostComments = query(z.number(), async (id) => {
 
 export const postComment = form(postCommentSchema, async (comment) => {
   const user = await requireAuth();
-  await db.insert(table.comments).values({ ...comment, authorId: user.id });
+  await db.insert(table.comments).values({ ...comment, author: user.id });
 });
