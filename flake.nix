@@ -22,7 +22,7 @@
         _system: pkgs:
         let
           # Build prettier-plugin-svelte from version-3 branch (Svelte 5 support)
-          prettier-plugin-svelte = pkgs.buildNpmPackage rec {
+          prettier-plugin-svelte = pkgs.buildNpmPackage {
             pname = "prettier-plugin-svelte";
             version = "3-unstable-2025-01-29";
 
@@ -60,17 +60,10 @@
             # JavaScript/TypeScript/Svelte formatter
             programs.prettier = {
               enable = true;
-              settings = {
+              settings = builtins.fromJSON (builtins.readFile ./.prettierrc) // {
+
                 plugins = [
                   "${prettier-plugin-svelte}/lib/node_modules/prettier-plugin-svelte/plugin.js"
-                ];
-                overrides = [
-                  {
-                    files = [ "*.svelte" ];
-                    options = {
-                      parser = "svelte";
-                    };
-                  }
                 ];
               };
               includes = [
