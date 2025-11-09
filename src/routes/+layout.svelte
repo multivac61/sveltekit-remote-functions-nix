@@ -16,7 +16,7 @@
 	</header>
 
 	<main>
-		{@render children?.()}
+		{@render children()}
 	</main>
 
 	<footer>{new Date().getFullYear()} &copy; Svelte Tricks</footer>
